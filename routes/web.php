@@ -27,8 +27,10 @@ Route::post('/clients/checkout', [OrderController::class, 'store'])->name('order
 Route::get('/order/{order}/payment', [PaymentController::class, 'show'])->name('payment.form');
 Route::post('/order/{order}/payment', [PaymentController::class, 'store'])->name('payment.store');
 Route::get('/order/{order}/payment/success', [PaymentController::class, 'success'])->name('payment.success');
-//Route::get('/order/{order}/show-order', [OrderController::class, 'show'])->name('order.show');
-// Route::get('/clients/show-order', [HomecontrollerClient::class, 'showOrder'])->name('clients.showOrder');
+//Route::get('order/{orderId}/show-order', [OrderController::class, 'show'])->name('order.show');
+Route::get('order/{orderId}/show-order', [OrderController::class, 'show'])->name('order.show');
+Route::get('/clients/order', [OrderController::class, 'index'])->name('orders.index');
+//Route::get('/clients/show-order', [OrderController::class, 'show'])->name('clients.show');
 
 //Route cho admin
 Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {

@@ -50,30 +50,43 @@
                         <span class="badge bg-dark text-white ms-1 rounded-pill">+</span>
                     </button>
                 </form>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
+                @if(isset($orderId) && $orderId)
+                <form class="d-flex" action="{{ route('orders.index') }}" method="GET">
+                    <button class="btn btn-outline-dark text-light" type="submit">
+                        <i class="bi-cart-fill me-1"></i>
+                        Đơn hàng
+                        <span class="badge bg-dark text-white ms-1 rounded-pill">+</span>
+                    </button>
                 </form>
+            @else
+                <p>Chưa có đơn hàng để xem.</p>
+            @endif
 
-                <div class="icon">
-                    @if (Auth::check())
-                        <a href="{{ route('profile') }}">
-                            <i class="fa-solid fa-user"></i> Profile
-                        </a>
-                        <a href="#"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <i class="fa-solid fa-sign-out-alt"></i> Đăng xuất
-                        </a>
-                    @else
-                        <a href="{{ route('login') }}">
-                            <i class="fa-solid fa-circle-user"></i> Đăng nhập
-                        </a>
-                    @endif
-                    @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
+            <div class="icon">
+                @if (Auth::check())
+                    <a href="{{ route('profile') }}">
+                        <i class="fa-solid fa-user"></i> Profile
+                    </a>
+                    <!-- Thêm form đăng xuất -->
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fa-solid fa-sign-out-alt"></i> Đăng xuất
+                    </a>
+                @else
+                    <a href="{{ route('login') }}">
+                        <i class="fa-solid fa-circle-user"></i> Đăng nhập
+                    </a>
                 @endif
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
                 </div>
+                @endif
+            </div>
+            
             </div>
         </div>
     </nav>

@@ -25,8 +25,7 @@
                 <span class="value status">{{ $order->trang_thai }}</span>
             </div>
         </div>
-
-        <a href="{{ route('home') }}" class="btn-home">Quay lại trang chủ</a>
+        <a href="{{ route('order.show', ['orderId' => $order->id]) }}" class="btn-home">Chuyển sang đơn hàng của tôi</a>
     </div>
 </div>
 

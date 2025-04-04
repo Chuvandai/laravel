@@ -15,6 +15,7 @@ class HomecontrollerClient extends Controller
 {
     public function index(Request $request)
     {
+        $orderId = Order::where('user_id', Auth::id())->latest()->value('id'); 
         // Lấy danh mục và banner
         $categories = Category::where('status', 0)->get();
         $banners = Banner::where('status', 0)->get();
@@ -40,7 +41,7 @@ class HomecontrollerClient extends Controller
         $products = $productsQuery->get();
 
         // Trả dữ liệu về view
-        return view('clients.index', compact('categories', 'products', 'banners'));
+        return view('clients.index', compact('categories', 'products', 'banners','orderId'));
     }
 
     public function show($id)

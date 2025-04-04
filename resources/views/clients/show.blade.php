@@ -1,5 +1,7 @@
 @include('clients.header')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="user-logged-in" content="{{ Auth::check() ? 'true' : 'false' }}">
+
 <div class="container-fluid product-detail-container">
 
     <div class="row">
@@ -381,7 +383,13 @@
     document.getElementById('addToCart').addEventListener('click', function() {
     let selectedStorage = document.querySelector('.storage-select.active');
     let selectedColor = document.querySelector('.color-select.active');
+    let isLoggedIn = document.querySelector('meta[name="user-logged-in"]').getAttribute('content') === 'true';
 
+if (!isLoggedIn) {
+    alert('Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng!');
+    window.location.href = "{{ route('login') }}"; // Chuyển hướng đến trang đăng nhập
+    return;
+}
     if (!selectedStorage || !selectedColor) {
         alert('Vui lòng chọn dung lượng và màu sắc!');
         return;
