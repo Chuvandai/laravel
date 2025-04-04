@@ -65,7 +65,7 @@
 
         <!-- Nav Item - Orders -->
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.orders.index') }}">
+            <a class="nav-link" href="{{ route('admin.ordersadmin.index') }}">
                 <i class="fas fa-fw fa-shopping-cart"></i>
                 <span>Quản lý đơn hàng</span>
             </a>

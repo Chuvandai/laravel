@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\client\HomecontrollerClient;
 use App\Http\Controllers\admin\BannerController;
 use App\Http\Controllers\admin\CardController;
+use App\Http\Controllers\admin\OderAdminController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\VariantController;
 use App\Http\Controllers\AuthController;
@@ -40,6 +41,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::resource('banners', BannerController::class);
     Route::resource('variants', VariantController::class);
     Route::resource('orders', OrderController::class);
+    Route::resource('ordersadmin', OderAdminController::class );
 });
 
 
