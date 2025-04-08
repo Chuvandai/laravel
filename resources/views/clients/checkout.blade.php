@@ -7,7 +7,7 @@
             <p class="order-subtitle">Vui lòng điền đầy đủ thông tin để đặt hàng</p>
         </div>
 
-        <form action="{{ route('order.store') }}" method="POST">
+        <form id="checkoutForm" action="{{ route('order.store') }}" method="POST">
             @csrf
             <div class="form-section">
                 <div class="form-group">
@@ -58,17 +58,35 @@
                                 required>
                             <option value="" disabled selected>Chọn phương thức thanh toán</option>
                             <option value="Thanh toán khi nhận hàng">Thanh toán khi nhận hàng</option>
-                            <option value="Thanh toán qua thẻ tín dụng">Thanh toán qua thẻ tín dụng</option>
-                            <option value="Thanh toán qua ví điện tử">Thanh toán qua ví điện tử</option>
+                            <option value="Thanh toán qua VNPay">Thanh toán qua VNPay</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <button type="submit" class="btn-order">Xác Nhận Đặt Hàng</button>
+            <input type="hidden" name="order_type" value="billpayment">
+            <input type="hidden" name="language" value="vn">
+            <input type="hidden" name="bank_code" value="">
+
+            <button type="submit" class="btn-order" id="submitBtn">Xác Nhận Đặt Hàng</button>
         </form>
     </div>
 </div>
+
+<script>
+document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    var form = this;
+    var paymentMethod = document.getElementById('phuong_thuc_thanh_toan').value;
+    
+    if (paymentMethod === 'Thanh toán qua VNPay') {
+        form.action = "{{ route('vnpay.payment') }}";
+    }
+    
+    form.submit();
+});
+</script>
 
 <style>
 .order-container {

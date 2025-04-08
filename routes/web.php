@@ -11,6 +11,7 @@ use App\Http\Controllers\admin\VariantController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\VnpayController;
 use Illuminate\Support\Facades\Route;
 // Route cho trang chủ client
 Route::get('/clients', [HomecontrollerClient::class, 'index'])->name('home');
@@ -26,6 +27,10 @@ Route::post('/clients/card', [CardController::class, 'add'])->name('card');
 Route::delete('/clients/card', [CardController::class, 'remove'])->name('card.remove');
 Route::get('/clients/checkout', [OrderController::class, 'index'])->name('order.index');
 Route::post('/clients/checkout', [OrderController::class, 'store'])->name('order.store');
+
+// VNPay Payment Routes
+Route::post('/vnpay/payment', [VnpayController::class, 'vnPay'])->name('vnpay.payment');
+Route::get('/vnpay/return', [VnpayController::class, 'vnPayReturn'])->name('vnpay.return');
 Route::get('/order/{order}/payment', [PaymentController::class, 'show'])->name('payment.form');
 Route::post('/order/{order}/payment', [PaymentController::class, 'store'])->name('payment.store');
 Route::get('/order/{order}/payment/success', [PaymentController::class, 'success'])->name('payment.success');

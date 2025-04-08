@@ -11,6 +11,9 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'ho_va_ten',
+        'dia_chi',
+        'so_dien_thoai',
         'trang_thai',
         'tong_tien',
         'phuong_thuc_thanh_toan'
