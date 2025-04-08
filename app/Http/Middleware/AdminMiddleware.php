@@ -18,6 +18,7 @@ class AdminMiddleware
         if (!Auth::check()) {
             return redirect('/clients/login')->with('error', 'Bạn cần đăng nhập trước');
         }
+        return $next($request);
 
         // Kiểm tra nếu không phải admin
         if (Auth::user()->role !== 'admin') {

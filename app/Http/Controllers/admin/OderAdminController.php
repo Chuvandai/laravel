@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 
 class OderAdminController extends Controller
@@ -13,8 +14,7 @@ class OderAdminController extends Controller
      */
     public function index()
     {
-        $orders = Order::paginate(10);
-        // dd($orders);
+        $orders = Order::with('orderDetails.product')->orderBy('created_at', 'desc')->paginate(10);
         return view('admin.ordersadmin.index', compact('orders'));
     }
 
@@ -38,9 +38,10 @@ class OderAdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $order = Order::with('orderDetails.product')->findOrFail($id);
+        return view('admin.ordersadmin.view', compact('order'));
     }
 
     /**
@@ -65,5 +66,17 @@ class OderAdminController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    /**
+     * Update the status of the specified order.
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+        $order->trang_thai = $request->status;
+        $order->save();
+
+        return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công!');
     }
 }

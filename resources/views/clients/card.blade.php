@@ -46,7 +46,8 @@
             {{ number_format($totalPrice, 0, ',', '.') }} VNĐ
            </div>
 
-          <a href="{{route('order.index')}}" class="btn btn-primary">Đặt hàng</a>
+          {{-- <a href="{{ route('order.index') }}" class="btn btn-primary">Đặt hàng</a> --}}
+          <a href="{{ route('checkout') }}" class="btn btn-primary">Thanh toán</a>
         </div>
       
     </div>

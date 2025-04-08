@@ -17,89 +17,197 @@
 </head>
 <body>
     <!-- Navigation-->
-    {{-- @include('clients.header') --}}
-    <nav class="navbar navbar-expand-lg navbar-white bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand text-light  " href="{{ route('home') }}">Shop</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <a class="navbar-brand" href="{{ route('home') }}">
+                <i class="fas fa-mobile-alt me-2 text-primary"></i>
+                <span class="fw-bold">PhoneShop</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                    <li class="nav-item "><a class="nav-link active text-light" aria-current="page"
-                            href="{{ route('home') }}">Trang
-                            chủ</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('home') }}">
+                            <i class="fas fa-home me-1"></i> Trang chủ
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light" id="navbarDropdown" href="#" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">Danh mục</a>
-                        <ul class="dropdown-menu text-light " aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item " href="{{ route('home') }}">Tất cả</a></li>
-                            <li>
-                                <hr class="dropdown-divider" />
-                            </li>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-th-large me-1"></i> Danh mục
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{ route('home') }}">Tất cả</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             @foreach ($categories as $category)
-                                <li><a class="dropdown-item" href="#">{{ $category->name }}</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('category.products', $category->id) }}">
+                                        <i class="fas fa-mobile-alt me-2"></i> {{ $category->name }}
+                                    </a>
+                                </li>
                             @endforeach
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex"  action="{{route('card')}}" method="GET">
-                    <button class="btn btn-outline-dark text-light" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Giỏ hàng
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">+</span>
-                    </button>
-                </form>
-                @if(isset($orderId) && $orderId)
-                <form class="d-flex" action="{{ route('orders.index') }}" method="GET">
-                    <button class="btn btn-outline-dark text-light" type="submit">
-                        <i class="bi-cart-fill me-1"></i>
-                        Đơn hàng
-                        <span class="badge bg-dark text-white ms-1 rounded-pill">+</span>
-                    </button>
-                </form>
-            @else
-                <p>Chưa có đơn hàng để xem.</p>
-            @endif
-
-            <div class="icon">
-                @if (Auth::check())
-                    <a href="{{ route('profile') }}">
-                        <i class="fa-solid fa-user"></i> Profile
-                    </a>
-                    <!-- Thêm form đăng xuất -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
+                <div class="d-flex align-items-center gap-3">
+                    <form class="d-flex me-3" action="{{route('card')}}" method="GET">
+                        <button class="btn btn-outline-primary position-relative" type="submit">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                +
+                            </span>
+                        </button>
                     </form>
-                    <a href="{{ route('logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fa-solid fa-sign-out-alt"></i> Đăng xuất
-                    </a>
-                @else
-                    <a href="{{ route('login') }}">
-                        <i class="fa-solid fa-circle-user"></i> Đăng nhập
-                    </a>
-                @endif
-                @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+
+                    @if(isset($orderId) && $orderId)
+                        <form class="d-flex me-3" action="{{ route('orders.index') }}" method="GET">
+                            <button class="btn btn-outline-primary position-relative" type="submit">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    +
+                                </span>
+                            </button>
+                        </form>
+                    @endif
+
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            @if (Auth::check())
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('profile') }}">
+                                        <i class="fas fa-user-circle me-2"></i> Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                        </button>
+                                    </form>
+                                </li>
+                            @else
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('login') }}">
+                                        <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
                 </div>
-                @endif
-            </div>
-            
             </div>
         </div>
     </nav>
-    <div class="fom">
-        <form method="GET" class="mb-3">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control w-auto"
-                    placeholder="Hôm nay bạn cần tìm kiếm gì nào hãy nhập vào đây ne !!!!"
-                    value="{{ request('search') }}">
-                <button type="submit" class="btn btn-outline-secondary">Tìm kiếm</button>
-            </div>
-        </form>
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="container">
+            <form method="GET" class="search-form">
+                <div class="search-wrapper">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <input type="text" name="search" class="search-input" 
+                        placeholder="Hôm nay bạn cần gì ở chúng tôi ..." 
+                        value="{{ request('search') }}">
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <style>
+        /* Search Bar Styles */
+        .search-container {
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            margin-top: 4rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .search-wrapper:focus-within {
+            box-shadow: 0 4px 20px rgba(13, 110, 253, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            padding: 0 1.5rem;
+            color: #6c757d;
+            font-size: 1.2rem;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 1rem 0;
+            font-size: 1.1rem;
+            outline: none;
+            color: #333;
+        }
+
+        .search-input::placeholder {
+            color: #adb5bd;
+        }
+
+        .search-button {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            background: #0b5ed7;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 1rem 0;
+                margin-top: 3.5rem;
+            }
+
+            .search-wrapper {
+                border-radius: 30px;
+            }
+
+            .search-icon {
+                padding: 0 1rem;
+                font-size: 1rem;
+            }
+
+            .search-input {
+                padding: 0.8rem 0;
+                font-size: 1rem;
+            }
+
+            .search-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+
     <!-- Slideshow -->
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -298,22 +406,106 @@
             text-decoration: none;
         }
         
-        
+        /* Filter Section */
+        .filter-section {
+            padding: 1rem 0;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-form {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .price-input {
+            width: 150px;
+            padding: 0.5rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .price-input:focus {
+            border-color: #0d6efd;
+        }
+
+        .filter-button {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-button:hover {
+            background: #0b5ed7;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 1rem 0;
+                margin-top: 3.5rem;
+            }
+
+            .search-wrapper {
+                border-radius: 30px;
+            }
+
+            .search-icon {
+                padding: 0 1rem;
+                font-size: 1rem;
+            }
+
+            .search-input {
+                padding: 0.8rem 0;
+                font-size: 1rem;
+            }
+
+            .search-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .filter-form {
+                flex-direction: column;
+                padding: 0 1rem;
+            }
+
+            .price-input {
+                width: 100%;
+            }
+
+            .filter-button {
+                width: 100%;
+            }
+        }
     </style>
 
-    <!-- Header-->
-    {{-- <header class="bg-dark py-0">
-            <div class="container px-4 px-lg-5 my-5">
-                <div class="text-center text-white">
-                    <h1 class="display  fw-bolder">Shop Online</h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Mua sắm online dễ dàng</p>
-                </div>
-            </div>
-        </header> --}}
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <form method="GET" class="filter-form">
+            <input type="number" name="min_price" class="price-input" 
+                placeholder="Giá tối thiểu" value="{{ request('min_price') }}">
+            <input type="number" name="max_price" class="price-input" 
+                placeholder="Giá tối đa" value="{{ request('max_price') }}">
+            <button type="submit" class="filter-button">
+                <i class="fas fa-filter me-2"></i>Lọc
+            </button>
+        </form>
+    </div>
 
     <!-- Section-->
     <div class="loc">
-        <form method="GET" class="mb-3">
+        {{-- <form method="GET" class="mb-3">
             <div class="input-group">
                 <input type="number" name="min_price" class="form-control" placeholder="Giá tối thiểu"
                     value="{{ request('min_price') }}">
@@ -321,7 +513,7 @@
                     value="{{ request('max_price') }}">
                 <button type="submit" class="btn btn-outline-secondary">Lọc</button>
             </div>
-        </form>
+        </form> --}}
     </div>
 
     <section class="py-0">
@@ -377,6 +569,44 @@
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Notification System -->
+    <div id="notification" class="position-fixed" style="z-index: 9999; top: 80px; right: 20px;">
+        <div class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span id="notification-message"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const toast = notification.querySelector('.toast');
+            const messageElement = document.getElementById('notification-message');
+            
+            messageElement.textContent = message;
+            
+            // Show the notification
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            // Automatically hide after 3 seconds
+            setTimeout(() => {
+                bsToast.hide();
+            }, 3000);
+        }
+
+        // Check for login success message in session
+        @if(session('success'))
+            showNotification('{{ session('success') }}');
+        @endif
+    </script>
 </body>
 @include('clients.footer')
 

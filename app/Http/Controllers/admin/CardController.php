@@ -74,5 +74,11 @@ class CardController extends Controller
     return redirect()->route('card')->with('error', 'Sản phẩm không tồn tại trong giỏ hàng');
   //  return response()->json(['success' => false, 'message' => 'Sản phẩm không tồn tại trong giỏ hàng.'], 400);
 }
+    public function checkout()
+{
+    return view('clients.checkout');
+    
+}
+
 
 }

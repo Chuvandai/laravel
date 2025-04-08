@@ -31,6 +31,12 @@ class OrderController extends Controller
             'phuong_thuc_thanh_toan' => 'required|string',
         ]);
 
+        // Lấy giỏ hàng từ session
+        $cart = session()->get('cart', []);
+        if (empty($cart)) {
+            return redirect()->back()->with('error', 'Giỏ hàng trống!');
+        }
+
         // Lưu đơn hàng vào cơ sở dữ liệu
         $order = new Order();
         $order->user_id = Auth::id();
@@ -41,6 +47,18 @@ class OrderController extends Controller
         $order->phuong_thuc_thanh_toan = $request->phuong_thuc_thanh_toan;
         $order->tong_tien = $this->calculateTotalAmount();
         $order->save();
+
+        // Lưu chi tiết đơn hàng
+        foreach ($cart as $productId => $details) {
+            OrderDetail::create([
+                'order_id' => $order->id,
+                'product_id' => $productId,
+                'variant_id' => $details['variant_id'] ?? null,
+                'so_luong' => $details['quantity'],
+                'don_gia' => $details['price'],
+                'thanh_tien' => $details['price'] * $details['quantity']
+            ]);
+        }
 
         // Xóa giỏ hàng sau khi đặt hàng
         session()->forget('cart');
